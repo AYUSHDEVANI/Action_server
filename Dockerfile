@@ -9,4 +9,4 @@ COPY actions/actions.py /app/actions.py
 EXPOSE 5055
 
 # Run the Action Server
-CMD ["run", "actions", "--enable-api", "--port", "5055"]
+CMD ["rasa", "run", "actions", "--enable-api", "--port", "5055"]
