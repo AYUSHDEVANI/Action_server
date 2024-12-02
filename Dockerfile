@@ -2,7 +2,7 @@
 FROM rasa/rasa-sdk:latest
 
 # Copy actions.py into the container
-COPY actions.py /app/actions.py
+COPY actions.py /actions/actions.py
 
 # Expose the default Action Server port
 EXPOSE 5055
