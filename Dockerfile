@@ -4,14 +4,11 @@ FROM rasa/rasa-sdk:3.5.0
 # Ensure root user is used for installation
 USER root
 
-# Upgrade pip and setuptools to avoid deprecated warnings
-RUN pip install --upgrade pip setuptools --no-cache-dir
+# Upgrade pip, setuptools, and wheel to avoid issues
+RUN pip install --upgrade pip setuptools wheel --no-cache-dir
 
 # Install rasa and rasa-sdk explicitly
 RUN pip install rasa rasa-sdk --no-cache-dir
-
-# Check the installed packages to debug
-RUN pip show rasa rasa-sdk
 
 # Set the working directory in the container
 WORKDIR /app
@@ -27,6 +24,7 @@ COPY . /app/
 
 # Set the command to start the Rasa action server
 CMD ["rasa", "run", "--actions", "actions"]
+
 
 
 
