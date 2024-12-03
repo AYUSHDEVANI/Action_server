@@ -1,18 +1,27 @@
 FROM rasa/rasa-sdk:3.5.0
 
-# Copy actions and requirements
-COPY ./actions /app/actions
-COPY requirements.txt /app/requirements.txt
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    python3-dev \
+    gcc \
+    && apt-get clean
 
-# Install Python dependencies
-RUN python -m venv /app/venv
-RUN /app/venv/bin/pip install --no-cache-dir -r /app/requirements.txt
+# Upgrade pip and setuptools
+RUN python -m pip install --no-cache-dir --upgrade pip setuptools wheel
 
 # Set working directory
 WORKDIR /app
 
-# Command to run the action server
-CMD ["/app/venv/bin/rasa", "run", "actions", "--actions", "actions.actions"]
+# Copy application files
+COPY ./actions /app/actions
+COPY requirements.txt /app/requirements.txt
+
+# Pre-install fire and other dependencies
+RUN pip install --no-cache-dir fire
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Run action server
+CMD ["rasa", "run", "actions", "--actions", "actions.actions"]
 
 
 
