@@ -7,8 +7,11 @@ USER root
 # Upgrade pip and setuptools to avoid deprecated warnings
 RUN pip install --upgrade pip setuptools --no-cache-dir
 
-# Install rasa-sdk explicitly if it's not part of the base image
-RUN pip install rasa-sdk --no-cache-dir
+# Install rasa and rasa-sdk explicitly
+RUN pip install rasa rasa-sdk --no-cache-dir
+
+# Check the installed packages to debug
+RUN pip show rasa rasa-sdk
 
 # Set the working directory in the container
 WORKDIR /app
@@ -24,6 +27,7 @@ COPY . /app/
 
 # Set the command to start the Rasa action server
 CMD ["rasa", "run", "--actions", "actions"]
+
 
 
 
