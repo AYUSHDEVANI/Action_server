@@ -1,8 +1,14 @@
 # Use a base image that includes Rasa SDK
 FROM rasa/rasa-sdk:3.5.0
 
-# Upgrade pip and setuptools to avoid deprecated warnings, install for the current user
-RUN pip install --upgrade pip setuptools --no-cache-dir --user
+# Ensure root user is used for installation
+USER root
+
+# Upgrade pip and setuptools to avoid deprecated warnings
+RUN pip install --upgrade pip setuptools --no-cache-dir
+
+# Install rasa-sdk explicitly if it's not part of the base image
+RUN pip install rasa-sdk --no-cache-dir
 
 # Set the working directory in the container
 WORKDIR /app
@@ -11,12 +17,12 @@ WORKDIR /app
 COPY requirements.txt /app/
 
 # Install the dependencies listed in requirements.txt
-RUN pip install --user -r requirements.txt --no-cache-dir
+RUN pip install -r requirements.txt --no-cache-dir
 
 # Copy the rest of the application code into the container
 COPY . /app/
 
-# Default command to run the action server when the container starts
+# Set the command to start the Rasa action server
 CMD ["rasa", "run", "--actions", "actions"]
 
 
