@@ -1,6 +1,8 @@
 {
-    "build": {
-      "dockerfilePath": "Dockerfile"
-    }
+  "build": {
+    "dockerfilePath": "Dockerfile"
+  },
+  "deploy": {
+    "startCommand": "rasa-sdk --actions actions.actions"
   }
-  
+}

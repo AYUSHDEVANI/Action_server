@@ -1,12 +1,17 @@
-# Dockerfile for Action Server
-
+# Use the official Rasa SDK image
 FROM rasa/rasa-sdk:latest
 
-# Copy actions.py into the container
-COPY actions/actions.py /app/actions.py
+# Copy actions into the container
+COPY ./actions /app/actions
 
-# Expose the default Action Server port
-EXPOSE 5055
+# Install dependencies
+COPY requirements.txt requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Run the Action Server
-CMD ["rasa", "run", "actions", "--enable-api", "--port", "5055"]
+# Set the working directory
+WORKDIR /app
+
+# Command to run the action server
+CMD ["start", "--actions", "actions.actions"]
+
+# CMD ["rasa", "run", "actions", "--enable-api", "--port", "5055"]
