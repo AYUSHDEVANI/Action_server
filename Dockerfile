@@ -1,27 +1,23 @@
+# Use a base image that includes Rasa SDK
 FROM rasa/rasa-sdk:3.5.0
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    python3-dev \
-    gcc \
-    && apt-get clean
+# Upgrade pip and setuptools to avoid deprecated warnings
+RUN pip install --upgrade pip setuptools
 
-# Upgrade pip and setuptools
-RUN python -m pip install --no-cache-dir --upgrade pip setuptools wheel
-
-# Set working directory
+# Set the working directory in the container
 WORKDIR /app
 
-# Copy application files
-COPY ./actions /app/actions
-COPY requirements.txt /app/requirements.txt
+# Copy the requirements.txt into the container
+COPY requirements.txt /app/
 
-# Pre-install fire and other dependencies
-RUN pip install --no-cache-dir fire
-RUN pip install --no-cache-dir -r requirements.txt
+# Install the dependencies listed in requirements.txt
+RUN pip install -r requirements.txt
 
-# Run action server
-CMD ["rasa", "run", "actions", "--actions", "actions.actions"]
+# Copy the rest of the application code into the container
+COPY . /app/
+
+# Default command to run the action server when the container starts
+CMD ["rasa", "run", "--actions", "actions"]
 
 
 
