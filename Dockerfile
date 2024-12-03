@@ -1,6 +1,9 @@
 # Use a base image that includes Rasa SDK
 FROM rasa/rasa-sdk:3.5.0
 
+# Ensure root user is used for installation
+USER root
+
 # Upgrade pip and setuptools to avoid deprecated warnings
 RUN pip install --upgrade pip setuptools --no-cache-dir
 
@@ -18,6 +21,7 @@ COPY . /app/
 
 # Default command to run the action server when the container starts
 CMD ["rasa", "run", "--actions", "actions"]
+
 
 
 
