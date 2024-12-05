@@ -1,25 +1,25 @@
+# Use a lightweight Python base image
 FROM python:3.10-slim
 
 # Set the working directory
 WORKDIR /app
 
-# Copy requirements.txt into the container
+# Copy the requirements file to the container
 COPY requirements.txt /app/
 
 # Install dependencies
-RUN pip install --upgrade pip setuptools wheel --no-cache-dir && \
-    pip install -r requirements.txt --no-cache-dir
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Explicitly install rasa-sdk
-RUN pip install rasa-sdk==3.6.2 --no-cache-dir
-
-# Symlink rasa-sdk binary to ensure it's in the PATH
-RUN ln -s $(pip show rasa-sdk | grep Location | awk '{print $2}')/rasa_sdk /usr/local/bin/rasa-sdk
-
-# Copy the application code
+# Copy the rest of the application code into the container
 COPY . /app/
 
-# Start the Rasa action server
+# Expose the port your Flask app or Rasa SDK uses (update if different)
+EXPOSE 5005
+
+# Set environment variables (optional, if needed)
+ENV PYTHONUNBUFFERED=1
+
+# Command to run the Rasa SDK
 CMD ["rasa-sdk", "--actions", "actions"]
 
 
