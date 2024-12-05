@@ -1,7 +1,7 @@
+rasa-sdk==3.6.2
+rasa==3.6.20
 Flask==3.1.0
 Flask-Cors==5.0.0
-rasa==3.6.20
-rasa-sdk==3.6.2
 SQLAlchemy==1.4.54
 lingua-language-detector==2.0.2
 geocoder==1.38.1
