@@ -10,6 +10,8 @@ COPY requirements.txt /app/
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
+RUN pip install rasa-sdk==3.6.2 --no-cache-dir
+
 # Copy the rest of the application code into the container
 COPY . /app/
 
