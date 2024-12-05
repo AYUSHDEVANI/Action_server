@@ -1,34 +1,37 @@
-# Use a lightweight Python base image
-FROM python:3.10-slim
+FROM python:3.8-slim
 
-# Set the working directory
+# Use Rasa base image
+FROM rasa/rasa:3.0.0
+
+# Set working directory
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    gcc \
-    build-essential \
-    libpq-dev \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+# Copy the Rasa directory into the container
+COPY ./app/rasa /app/rasa
 
-# Copy the requirements file
-COPY requirements.txt /app/
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the application files
-COPY . /app/
 
-# Expose the Rasa SDK port
+# Copy the Flask app directory into the container
+COPY ./actions /actions
+USER root
+
+# Install Python dependencies for Flask
+RUN pip install --upgrade pip
+RUN pip install -r /requirements.txt
+
+
+USER rasa
+
+# Expose ports for Rasa and Flask
 EXPOSE 5055
 
-# Command to run the Rasa SDK server
-CMD ["rasa-sdk", "--actions", "actions"]
+# Command to run Rasa and Flask simultaneously (or adjust as needed)
+# CMD ["rasa", "run", "--enable-api", "--cors", "*", "--port", "5005"]
 
-
-
+# COPY ./app/start.sh /app/start.sh
+# RUN chmod +x /app/start.sh
+CMD ["rasa", "run", "actions"]
 
 
 
